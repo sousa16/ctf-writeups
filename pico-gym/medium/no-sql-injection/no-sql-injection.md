@@ -20,4 +20,4 @@ Write-up:
     `"lastName": "player"`
 	`}`
 
-3.  The 2 equal signs at the end suggest base64 encoding. Decoding with CyberChef returns the flag: ***picoCTF{jBhD2y7XoNzPv_1YxS9Ew5qL0uI6pasql_injection_784e40e8}***
+3. The 2 equal signs at the end suggest base64 encoding. Decoding with CyberChef returns the flag: ***picoCTF{jBhD2y7XoNzPv_1YxS9Ew5qL0uI6pasql_injection_784e40e8}***
