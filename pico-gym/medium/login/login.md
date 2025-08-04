@@ -1,5 +1,7 @@
 ## login
 
+[Link to challenge](https://play.picoctf.org/practice/challenge/200)
+
 Write-up:
 
 1. We are given a web page with a login form. After using Browser Inspect's Network section, we find a **index.js** file we can access.

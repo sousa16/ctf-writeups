@@ -1,5 +1,7 @@
 ## Search Source
 
+[Link to challenge](https://play.picoctf.org/practice/challenge/295?)
+
 Write-up:
 
 1. Taking a hint from the title, we're probably supposed to search the source code of the website for the flag.
