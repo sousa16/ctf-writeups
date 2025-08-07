@@ -114,8 +114,23 @@ Write-up:
 
 1. We need to discover which template engine the lab is using and then craft a 
 payload to delete /home/carlos/.ssh/id_rsa. After logging in, we find a setup similar to
-**Basic SSTI (code context)**. Intercepting the "Preferred Name" request allows us
-to craft a payload using the **blog-post-author-display** parameter.
+**Basic SSTI (code context)**. 
 
-2. Changing the parameter to `blog-post-author-display=user.name}}{{7*7` shows us
-that code is being executed.
+2. In our "My account" page, we have access to 2 different relevant POST requests: 
+`POST /my-account/avatar` and `POST /my-account/change-blog-post-author-display`.
+These are relevant because we can see the changes being applied when we open a post's comments.
+
+3. When we upload an invalid image, we find out a user.SetAvatar() method exists, and that there
+is a /home/carlos/User.php. <br>
+`blog-post-author-display=user.setAvatar("/home/carlos/User.php","image/png")` <br>
+This payload makes it so that the avatar is the relevant php file, and a GET request to it
+allows us access to the file.
+
+4. We see there is a method called gdprDelete which happens to delete the avatar file. <br>
+    ```
+    blog-post-author-display=user.setAvatar("/home/carlos/.ssh/id_rsa","image/png")
+    blog-post-author-display=user.gdprDelete()
+    ```
+
+    These 2 payloads solve the lab.
+
