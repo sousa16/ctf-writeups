@@ -9,7 +9,7 @@ Write-up:
 2. Analyzing the source code shows us that a JavaScript file exists, and its code is definitely obfuscated (obfuscated-script.js).
 After some analyzing, we can see that this code has a decoder function:
 
-    ```
+    ```javascript
     const _0x4e0e = function(_0x553839, _0x53c021) {
         _0x553839 = _0x553839 - 0x1d6; // - 470
         let _0x402c6f = _0x402c[_0x553839];
@@ -21,7 +21,7 @@ After some analyzing, we can see that this code has a decoder function:
     
 3. Next, we see an array shuffling function:
 
-    ```
+    ```javascript
     (function(_0x76dd13, _0x3dfcae) {
         const _0x371ac6 = _0x4e0e;
         while (!![]) {
@@ -47,7 +47,7 @@ After some analyzing, we can see that this code has a decoder function:
 
     This function is shuffling the array to make calculations harder. By running this function in a separate file (simulate-shuffle.js), we can see what the shuffled list looks like:
 
-    ```
+    ```javascript
     AFTER shuffle: [
     'instance',       'copy_char',
     '43591XxcWUl',    '504454llVtzW',
@@ -68,7 +68,7 @@ After some analyzing, we can see that this code has a decoder function:
 4. Analyzing the async function, we can see the decoder function being assigned to a different hex value for obfuscation purposes.
 Also, there are multiple assignments meant to confuse us. After some calculation, we get:
 
-    ```
+    ```javascript
     (async () => {
         const _0x48c3be = _0x4e0e; // -470
         let _0x5f0229 = await fetch(_0x48c3be(0x1e9)); // fetch('./JIFxzHyW8W') WebAssembly module

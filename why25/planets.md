@@ -6,7 +6,7 @@ planet information to display. This request uses a SQL query we can manipulate.
 2. Altering the query to
 `query=SELECT table_name FROM information_schema.tables WHERE table_schema=database();`
 shows us there is another table:
-    ```
+    ```json
     [{
         "TABLE_NAME": "abandoned_planets"
     }, {

