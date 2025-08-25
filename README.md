@@ -1,7 +1,7 @@
 # 🔐 CTF Write-ups & Web Security Labs
 
 Welcome to my collection of **CTF write-ups** and **security lab solutions**.  
-This repo is my personal knowledge base — documenting the challenges I've solved,  
+This repo is my personal knowledge base - documenting the challenges I've solved,  
 breaking down my thought process, and reflecting on what I’ve learned along the way.  
 
 💡 The focus is **Web Exploitation**. 
@@ -22,6 +22,7 @@ Here’s what you’ll find inside:
 
 - **CTF event folders**  
   Each CTF has its own directory with write-ups for the challenges I solved. Example:  
+  - `lit25/` → LIT CTF 2025
   - `crhc25/` → CRHC CTF 2025  
   *(and more as I play new CTFs!)*
 
@@ -30,7 +31,7 @@ Here’s what you’ll find inside:
 
 ## 🧭 What to Expect in Each Write-up
 
-Each write-up is more than just the "answer" — it includes:
+Each write-up includes:
 
 - 📝 **Challenge context** (what the problem is testing)  
 - 🛠 **Tools & techniques used**  
@@ -50,7 +51,7 @@ Each write-up is more than just the "answer" — it includes:
 ## ⚡ Future Plans
 
 - Keep expanding web exploitation write-ups  
-- Tackle full CTF competitions and archive them here  
+- Tackle more CTF competitions and archive them here  
 
 --- 
 <br>
