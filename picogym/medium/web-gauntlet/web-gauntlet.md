@@ -1,4 +1,4 @@
-## Web gauntlet
+## Web Gauntlet
 
 [Link to challenge](https://play.picoctf.org/practice/challenge/88)
 
@@ -14,4 +14,13 @@ see that what triggered the filter was the `OR` keyword.
 
 4. Using username `admin'-- ` worked. On to round 2.
 
-5. 
+5. Checking `filter.php` shows us that `-- ` won't work anymore. However, we can use
+a multiline comment in the username to bypass that: `admin'/*`. On to round 3.
+
+6. The same payload works for round 3, since multiline comments aren't blocked.
+On to round 4.
+
+7. Checking `filter.php` shows us the word `admin` is blocked. We can rebuild the word
+using concatenation: `ad'||'min'/*`. On to round 5.
+
+8. The same payload works for the last round, and we get the flag: **picoCTF{y0u_m4d3_1t_79a0ddc6}**
