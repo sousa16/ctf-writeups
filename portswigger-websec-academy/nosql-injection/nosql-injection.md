@@ -2,6 +2,7 @@
 [Detecting NoSQL injection](https://portswigger.net/web-security/nosql-injection/lab-nosql-injection-detection)
 
 Write-up:
+
 1. Website as a filtering feature, which accesses the following url:
    https://0aee005103709b8ae2a908f1003f00c8.web-security-academy.net/filter?category=Accessories
 
@@ -13,6 +14,7 @@ Write-up:
 [NoSQL injection to bypass authentication](https://portswigger.net/web-security/nosql-injection/lab-nosql-injection-bypass-authentication)
 
 Write-up:
+
 1. We are told to login as `administrator` user, and we are given wiener:peter as valid credentials
    
 2. If we use the following payloads, we get logged in as the valid user:
@@ -31,6 +33,7 @@ Files:
 brute.py
 
 Write-up:
+
 1. When intercepting the correct login request, we find a GET /user/lookup?user=wiener.
    If we attempt to lookup user `administrator`, we see that it also exists.
 
@@ -55,6 +58,7 @@ brute-operator.py
 brute-operator-p2.py
 
 Write-up:
+
 1. We are told to log in as `carlos`, so we intercept a request with user `carlos`.
 2. Sending `{"username":"carlos","password":{"$ne":"invalid"}}` returns "Account Locked", which means that we can't access the account, but the operator was successful.
 3. Sending `{"username":"carlos","password":{"$ne":"invalid"}, "$where": "0"}` returns "invalid username or password", but sending `{"username":"carlos","password":{"$ne":"invalid"}, "$where": "1"}` returns the same "Account Locked" as before, which means the $where operator is being evaluated.

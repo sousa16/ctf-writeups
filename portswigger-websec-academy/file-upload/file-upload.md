@@ -1,12 +1,12 @@
 
 ## Web shell upload via path traversal
-
 [Web Shell upload via path traversal](https://portswigger.net/web-security/file-upload/lab-file-upload-web-shell-upload-via-path-traversal)
 
 Files: 
 rcewebshell.php
 
 Write-up:
+
 1. Upload a PHP web shell to the default `avatars/` directory.
    
 2. Attempting to execute the web shell via GET request shows the code in plain text, indicating the directory is configured to prevent script execution.
@@ -24,6 +24,7 @@ Files:
 rcewebshell.php
 
 Write-up:
+
 1. After attempting to upload a PHP web shell, the server responds with a message that the file format is not supported.
    
 2. Using a proxy tool, intercept the request and change the Content-Type header from application/x-php to image/png.
@@ -41,6 +42,7 @@ Files:
 rcewebshell.php
 
 Write-up:
+
 1. After submiting payload and using GET request to execute code, it returns:
    "Sorry, php files are not allowed Sorry, there was an error uploading your file."
 2. Change the value of the `filename` parameter to `.htaccess`.
@@ -64,6 +66,7 @@ Files:
 rcewebshell.php
 
 Write-up:
+
 1. After uploading exploit, we get:
    Sorry, only JPG & PNG files are allowed
 
@@ -88,6 +91,7 @@ Files:
 png.php
 
 Write-up:
+
 1. Creating a fake PNG file by adding the **PNG magic bytes** and adding the payload after them
    
 2. Server didn't validate file extension, so I uploaded png.php
@@ -101,6 +105,7 @@ Files:
 race.py
 
 Write-up:
+
 1. We are given the code that introduces the race condition. Upon analysis, we see that the file is temporarily moved to a directory, and only then validated. This introduces a small time window (after moving and before validating) where we the PHP file exists on the server before getting deleted.
    
 2. To exploit this, we need to send the POST request in parallel with multiple GET requests in order to achieve correct timing. For this, we use race.py, which uses the asyncio and httpx libraries.

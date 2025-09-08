@@ -42,6 +42,7 @@ Write-up:
 [Accidental exposure of private GraphQL fields](https://portswigger.net/web-security/graphql/lab-graphql-accidental-field-exposure)
 
 Write-up:
+
 1. Using introspection, we can find more about the schema:
 
     ```json
@@ -72,6 +73,7 @@ Write-up:
 [Finding a hidden GraphQL endpoint](https://portswigger.net/web-security/graphql/lab-graphql-find-the-endpoint)
 
 Write-up:
+
 1. Attempting to access some common locations for GraphQL endpoints makes us find `/api`,
    which returns a JSON with "Query not present".
 
@@ -107,6 +109,7 @@ Write-up:
 [Bypassing GraphQL brute force protections](https://portswigger.net/web-security/graphql/lab-graphql-brute-force-protection-bypass)
 
 Write-up:
+
 1. We are instructed to brute-force the login. Using `alias-brute-force-login.py` 
    (which uses aliases to bypass rate limiting), we are able to find the credentials
    and solve the lab - **carlos:1234567890**
@@ -115,6 +118,7 @@ Write-up:
 [Performing CSRF exploits over GraphQL](https://portswigger.net/web-security/graphql/lab-graphql-csrf-via-graphql-api)
 
 Write-up:
+
 1. After logging in, we can use Caido to see the update email request:
 
     ```http
