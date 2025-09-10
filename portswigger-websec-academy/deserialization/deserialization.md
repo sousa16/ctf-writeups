@@ -151,3 +151,16 @@ URL-decoding it reveals:
     craft a script to get us a valid cookie: `php-cookie.php`
 
 4. Setting the script's output as the session cookie solves the lab. 
+
+## Exploiting Ruby deserialization using a documented gadget chain
+
+[Exploiting Ruby deserialization using a documented gadget chain](https://portswigger.net/web-security/deserialization/exploiting/lab-deserialization-exploiting-ruby-deserialization-using-a-documented-gadget-chain)
+
+Write-up:
+
+1. After some research, we find this [article](https://devcraft.io/2021/01/07/universal-deserialisation-gadget-for-ruby-2-x-3-x.html)
+Reading it and learning from it allows us to craft the `ruby-gadget-chain.rb` script
+that generates a payload: `ruby ruby-gadget-chain.rb` - executable 
+on [Ruby 2.x](https://www.tutorialspoint.com/compilers/online-ruby-compiler.htm).
+
+2. URL-encoding the output and setting it as session cookie solves the lab.
