@@ -12,7 +12,7 @@ breaking down my thought process, and reflecting on what I’ve learned along th
 
 Here’s what you’ll find inside:
 
-- **`portswigger-web-academy/`**  
+- **`portswigger-websec-academy/`**  
   Step-by-step write-ups for the [PortSwigger Web Security Academy](https://portswigger.net/web-security) labs.  
   Covers fundamentals → advanced web vulns with explanations and payloads.
 
